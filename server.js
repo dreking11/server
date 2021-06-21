@@ -11,14 +11,15 @@ require('dotenv').config();
 const app = express()
 
 //db
-mongoose.connect(process.env.DATABASE, {
+mongoose.
+connect(process.env.DATABASE, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: true,
-    useUnifiedTopology:true
+    useUnifiedTopology: true,
 })
 .then(() => console.log("DB CONNECTED"))
-.catch(err => console.log(`DB CONNECTION ERR`))
+.catch(err => console.log("DB CONNECTION ERR", err));
 
 //middlewares
 app.use(morgan("dev"));
