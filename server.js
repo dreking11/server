@@ -8,7 +8,7 @@ require('dotenv').config();
 
 
 //app
-const app = express()
+const app = express();
 
 //db
 mongoose.
