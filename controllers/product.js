@@ -101,3 +101,32 @@ exports.productsCount = async (req,res) => {
     .exec();
     res.json(total);
 };
+
+exports.productStar = async (req, res) => {
+  const product = await Product.findById(req.params.productId).exec();
+  const user = await User.finOne({ email: req.user.email }).exec();
+  const { star } = req.body;
+
+  let existingRatingObject = product.ratings.find(
+    (ele) => ele.postedBy == user._id
+  );
+
+  if (existingRatingObject === undefined) {
+    let ratingAdded = await Product.findByIdAndUpdate(
+      product._id,
+      {
+        $push: { ratings: { star: star, postedBy: user._id } },
+      },
+      { new: true }
+    ).exec();
+    res.json(ratingAdded);
+  } else {
+    const ratingUpdated = await Product.updateOne({
+      ratings: { $eleMatch: existingRatingObject },
+    }, 
+    {$set: {"ratings.$.star": star}},
+    {new: true}
+    ).exec();
+    res.json(ratingUpdated);
+  }
+};
